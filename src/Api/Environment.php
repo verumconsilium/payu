@@ -26,22 +26,22 @@ class Environment
     const SUBSCRIPTIONS_API = "SUBSCRIPTIONS_API";
     
     /** url used to payments service Api  */
-    private static $paymentsUrl = "https://Api.payulatam.com/payments-Api/4.0/service.cgi";
+    private static $paymentsUrl = "https://api.payulatam.com/payments-api/4.0/service.cgi";
     
     /** url used to reports service Api  */
-    private static $reportsUrl = "https://Api.payulatam.com/reports-Api/4.0/service.cgi";
+    private static $reportsUrl = "https://api.payulatam.com/reports-api/4.0/service.cgi";
     
     /** url used to subscriptions service Api  */
-    private static $subscriptionsUrl = "https://Api.payulatam.com/payments-Api/rest/v4.3";
+    private static $subscriptionsUrl = "https://api.payulatam.com/payments-api/rest/v4.3/";
     
     /** url used to subscriptions service Api  if the test variable is true */
-    private static $paymentsTestUrl = "https://Api.payulatam.com/payments-Api/4.0/service.cgi";
+    private static $paymentsTestUrl = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi";
     
     /** url used to reports service Api  if the test variable is true */
-    private static $reportsTestUrl = "https://Api.payulatam.com/reports-Api/4.0/service.cgi";
+    private static $reportsTestUrl = "https://sandbox.api.payulatam.com/reports-api/4.0/service.cgi";
     
     /** url used to subscriptions service Api  if the test variable is true */
-    private static $subscriptionsTestUrl = "https://Api.payulatam.com/payments-Api/rest/v4.3";
+    private static $subscriptionsTestUrl = "https://sandbox.api.payulatam.com/payments-api/rest/v4.3/";
     
     /** url used to subscriptions service Api  if is not null*/
     private static $paymentsCustomUrl = null;
@@ -66,6 +66,8 @@ class Environment
      */
     public static function getApiUrl($api)
     {
+        self::checkEnvironment();
+
         switch ($api) {
             case Environment::PAYMENTS_API:
                 return Environment::getPaymentsUrl();
@@ -80,14 +82,16 @@ class Environment
     
     /**
      * Returns the payments url
-     * @return string  the paymets url configured
+     * @return string  the payments url configured
      */
     public static function getPaymentsUrl()
     {
+        self::checkEnvironment();
+
         if (isset(Environment::$paymentsCustomUrl)) {
             return Environment::$paymentsCustomUrl;
         }
-        
+
         if (!Environment::$test) {
             return Environment::$paymentsUrl;
         } else {
@@ -101,6 +105,8 @@ class Environment
      */
     public static function getReportsUrl()
     {
+        self::checkEnvironment();
+
         if (Environment::$reportsCustomUrl != null) {
             return Environment::$reportsCustomUrl;
         }
@@ -118,6 +124,8 @@ class Environment
      */
     public static function getSubscriptionUrl()
     {
+        self::checkEnvironment();
+
         if (Environment::$subscriptionsCustomUrl != null) {
             return Environment::$subscriptionsCustomUrl;
         }
@@ -174,5 +182,12 @@ class Environment
                 throw new ErrorException('The Payu library requires the ' . $ext . ' extension.');
             }
         }
+    }
+
+    protected static function checkEnvironment()
+    {
+        self::$test = isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] == 'production'
+                      ? false
+                      : true;
     }
 }
