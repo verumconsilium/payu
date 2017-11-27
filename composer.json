@@ -1,0 +1,12 @@
+{
+    "name": "verumconsilium/payu",
+    "description": "Wrapper SDK de PayU Latam",
+    "type": "package",
+    "license": "GNU GPLv3",
+    "require": {},
+    "autoload": {
+        "psr-4" : {
+            "VerumConsilium\\PayU\\": "src/"
+        }
+    }
+}
