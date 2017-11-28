@@ -2,6 +2,10 @@
 
 namespace VerumConsilium\PayU\Util;
 
+use InvalidArgumentException;
+use stdClass;
+use VerumConsilium\PayU\Api\PayUConfig;
+
 /**
  *
  * This class has utility methods for objects used in the request
@@ -17,7 +21,7 @@ class PayURequestObjectUtil
      * Remove null values of object or array
      * @param Object $object parameter with null values
      * @throws InvalidArgumentException if the object parameter is null
-     * @return the object processed
+     * @return string the object processed
      */
     public static function removeNullValues($object)
     {
@@ -67,14 +71,14 @@ class PayURequestObjectUtil
     
     /**
      * Convert to utf-8 the string values
-     * @param Object or array $object parameter with string values
+     * @param stdClass|array $object parameter with string values
      * @throws InvalidArgumentException if the object parameter is null or it isn't a object
-     * @return the object processed
+     * @return string the object processed
      */
     public static function encodeStringUtf8($object)
     {
         if (!isset($object)) {
-            throw new InvalidArgumentException("the object to enconde  is null ");
+            throw new InvalidArgumentException("the object to encode  is null ");
         }
         
         if (!is_object($object) && !is_array($object)) {
@@ -103,10 +107,10 @@ class PayURequestObjectUtil
     }
     
     /**
-     * Adjust miliseconds from epoch to date format
+     * Adjust milliseconds from epoch to date format
      * @param the object or array $data
      * @throws InvalidArgumentException
-     * @return the object or array processed
+     * @return stdClass|array the object or array processed
      */
     public static function formatDates($data)
     {
@@ -123,11 +127,11 @@ class PayURequestObjectUtil
         foreach ($data as $k => $v) {
             if (PayURequestObjectUtil::isKeyDateField($k)) {
                 if (is_array($data)) {
-                    $miliseconds = $data[$k];
-                    $data[$k] = PayURequestObjectUtil::getDate($miliseconds);
+                    $milliseconds = $data[$k];
+                    $data[$k] = PayURequestObjectUtil::getDate($milliseconds);
                 } elseif (is_object($data)) {
-                    $miliseconds = $data->$k;
-                    $data->$k = PayURequestObjectUtil::getDate($miliseconds);
+                    $milliseconds = $data->$k;
+                    $data->$k = PayURequestObjectUtil::getDate($milliseconds);
                 }
             } elseif (is_object($data) && (is_object($data->$k) || is_array($data->$k))) {
                 $data->$k = PayURequestObjectUtil::formatDates($data->$k);
@@ -163,15 +167,15 @@ class PayURequestObjectUtil
     
     /**
      * Format a integer to a date string using PayUConfig::PAYU_DATE_FORMAT
-     * @param integer $miliseconds
+     * @param integer $milliseconds
      * @throws InvalidArgumentException
-     * @return the date string
+     * @return string the date string
      */
-    public static function getDate($miliseconds)
+    public static function getDate($milliseconds)
     {
-        $formattedValue = floatval($miliseconds);
+        $formattedValue = floatval($milliseconds);
         if ($formattedValue == 0 || $formattedValue == 1) {
-            throw new InvalidArgumentException("the value in miliseconds for date is invalid");
+            throw new InvalidArgumentException("the value in milliseconds for date is invalid");
         }
         
         $seconds = round($formattedValue/1000);

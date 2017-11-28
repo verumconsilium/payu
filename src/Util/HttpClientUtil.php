@@ -2,6 +2,11 @@
 
 namespace VerumConsilium\PayU\Util;
 
+use RuntimeException;
+use VerumConsilium\PayU\Api\PayUHttpRequestInfo;
+use VerumConsilium\PayU\Exception\ConnectionException;
+use VerumConsilium\PayU\Exception\PayUErrorCodes;
+
 /**
  * Utility class for send http request
  * @author PayU Latam
@@ -17,13 +22,14 @@ class HttpClientUtil
     const CONTENT_LENGTH =  'Content-Length: ';
     
     const ACCEPT_LANGUAGE = 'Accept-Language: ';
-    
+
     /**
      * Sends a request type json
-     * @param Object $request this object is encode to json is used to request data
+     *
+     * @param string $request   this object is encode to json is used to request data
      * @param PayUHttpRequestInfo $payUHttpRequestInfo object with info to send an api request
      * @return string response
-     * @throws RuntimeException
+     * @throws ConnectionException
      */
     public static function sendRequest($request, PayUHttpRequestInfo $payUHttpRequestInfo)
     {

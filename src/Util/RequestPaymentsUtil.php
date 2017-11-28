@@ -2,8 +2,13 @@
 
 namespace VerumConsilium\PayU\Util;
 
+use InvalidArgumentException;
 use stdClass;
+use VerumConsilium\PayU\Api\PaymentMethods;
 use VerumConsilium\PayU\Api\PayUCommands;
+use VerumConsilium\PayU\Api\PayUConfig;
+use VerumConsilium\PayU\Api\PayUKeyMapName;
+use VerumConsilium\PayU\Api\TransactionType;
 use VerumConsilium\PayU\PayU;
 
 /**
@@ -125,7 +130,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
      * Build a payment request
      * @param array $parameters the parameters to build a request
      * @param string $transactionType the transaction type
-     * @param strng $lang to be used
+     * @param string $lang to be used
      * @return stdClass the request built
      */
     public static function buildPaymentRequest($parameters, $transactionType, $lang = null)
@@ -161,9 +166,9 @@ class RequestPaymentsUtil extends CommonRequestUtil
     /**
      * Build a transaction object to be added to payment request
      * @param array $parameters the parameters to build a transaction
-     * @param strng $lang to be used
-     * @return the transaction built
-     * @throws InvalidArgumentException if any paramter is invalid
+     * @param string $lang to be used
+     * @return string the transaction built
+     * @throws InvalidArgumentException if any parameter is invalid
      *
      */
     private static function buildTransactionRequest($parameters, $lang)
@@ -270,7 +275,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
      * Build a transaction object to be added to payment request
      * this build a transaction request to after authorization o authorization and capture
      * @param array $parameters the parameters to build a transaction
-     * @return the transaction built
+     * @return stdClass the transaction built
      */
     private static function buildTransactionRequestAfterAuthorization($parameters)
     {
@@ -290,7 +295,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
      * Build a order object to be added to payment request
      * @param array $parameters the parameters to build a object
      * @param string $lang
-     * @return the order built
+     * @return stdClass the order built
      */
     private static function buildOrderRequest($parameters, $lang)
     {
@@ -315,7 +320,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
      * @param object $order
      * @param array $parameters the parameters to build a object
      * @param string $lang to be used
-     * @return the order with the basic information added
+     * @return stdClass the order with the basic information added
      *
      */
     private static function addOrderBasicData($order, $parameters, $lang)
@@ -338,7 +343,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
      * @param string $txValue
      * @param string $taxValue
      * @param string $taxReturnBase
-     * @return the a map with the valid additional values
+     * @return stdClass the a map with the valid additional values
      *
      */
     private static function buildOrderAdditionalValues($txCurrency, $txValue, $taxValue, $taxReturnBase)
@@ -360,7 +365,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
      * @param string $txCurrency the code of the transaction currency
      * @param string $txValueName the parameter name
      * @param string $value the parameter value
-     * @return $container whith the valid additional values  added
+     * @return stdClass $container with the valid additional values  added
      *
      */
     private static function addAdditionalValue($container, $txCurrency, $txValueName, $value)
@@ -382,7 +387,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
      * @param Object $container
      * @param string $name the name of parameter
      * @param string $value the parameter value
-     * @return $container whith the valid extra parameters added
+     * @return stdClass $container with the valid extra parameters added
      *
      */
     private static function addExtraParameter($container, $name, $value)
@@ -403,7 +408,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
     /**
      * Build a buyer object to be added to payment request
      * @param array $parameters
-     * @return return a buyer
+     * @return stdClass return a buyer
      */
     private static function buildBuyer($parameters)
     {
@@ -422,7 +427,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
     /**
      * Build a payer object to be added to payment request
      * @param array $parameters
-     * @return return a payer
+     * @return stdClass return a payer
      */
     private static function buildPayer($parameters)
     {
@@ -449,7 +454,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
     /**
      * Build an address object to be added to payment request
      * @param array $parameters
-     * @return return an address
+     * @return stdClass return an address
      */
     private static function buildAddress($parameters)
     {
@@ -470,7 +475,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
     /**
      * Build an address object to be added to payment request
      * @param array $parameters
-     * @return return an address
+     * @return stdClass return an address
      */
     private static function buildBuyerAddress($parameters)
     {
@@ -490,9 +495,9 @@ class RequestPaymentsUtil extends CommonRequestUtil
     
     /**
      * Build a credit card object to be added to payment request
-     * @param object $transaction the transaction where the credit card will be added
-     * @param object $parameters with the credit card info
-     * @return the credit built
+     * @param stdClass $transaction
+     * @param array $parameters with the credit card info
+     * @return stdClass the credit built
      */
     private static function buildCreditCardTransaction($transaction, $parameters)
     {
@@ -501,8 +506,8 @@ class RequestPaymentsUtil extends CommonRequestUtil
 
     /**
      * Build a credit card object to be added to payment request when is used token for payments
-     * @param object $parameters with the credit card info
-     * @return the credit card built
+     * @param array $parameters with the credit card info
+     * @return stdClass the credit card built
      */
     private static function buildCreditCardForToken($parameters)
     {
@@ -510,13 +515,14 @@ class RequestPaymentsUtil extends CommonRequestUtil
         $creditCard->securityCode = CommonRequestUtil::getParameter($parameters, PayUParameters::CREDIT_CARD_SECURITY_CODE);
         return $creditCard;
     }
-    
+
     /**
      * Adds the extra parameters required by the PSE payment method
      *
      * @param transaction
      * @param parameters
-     * @throws InvalidParametersException
+     * @return \stdClass
+     * @throws \InvalidArgumentException
      */
     private static function addPSEExtraParameters($transaction, $parameters)
     {
@@ -641,7 +647,7 @@ class RequestPaymentsUtil extends CommonRequestUtil
     /**
      * Builds a bank account list request
      *
-     * @param parameters The parameters to be sent to the server
+     * @param array $parameters The parameters to be sent to the server
      * @return stdClass with the bank account list request built
      */
     public static function buildBankAccountListRequest($parameters)

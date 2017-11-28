@@ -5,7 +5,7 @@ namespace VerumConsilium\PayU\Util;
 /**
  *
  * Contains the parameters names
- * used in the differents methods
+ * used in the different methods
  *
  * @author PayU Latam
  * @since 1.0.0

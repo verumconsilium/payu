@@ -2,6 +2,9 @@
 
 namespace VerumConsilium\PayU\Util;
 
+use InvalidArgumentException;
+use VerumConsilium\PayU\Api\PayUKeyMapName;
+
 /**
  *
  * Utility class to generate the payu signature
@@ -37,8 +40,8 @@ namespace VerumConsilium\PayU\Util;
       * @param string $merchantId the identifier of merchant
       * @param string $key authentication key
       * @param string $algorithm the to use
-      * @throws IllegalArgumentException
-      * @return the signature built
+      * @throws InvalidArgumentException
+      * @return string the signature built
       */
      public static function buildSignature($order, $merchantId, $key, $algorithm)
      {
@@ -59,7 +62,7 @@ namespace VerumConsilium\PayU\Util;
       * @param Object $order the order to be sent in a transaction request
       * @param string $merchantId the identifier of merchant
       * @param string $key authentication key
-      * @return the plain message
+      * @return string the plain message
       */
      public static function buildMessage($order, $merchantId, $key)
      {

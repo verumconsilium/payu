@@ -2,6 +2,8 @@
 
 namespace VerumConsilium\PayU\Util;
 
+use InvalidArgumentException;
+
 /**
  *
  * Util class to build the url to Api operations
@@ -39,9 +41,9 @@ abstract class UrlResolver
      * build an url segment using the entity, operation and the url params
      * @param string $entity
      * @param string $operation
-     * @param string $params
+     * @param array $params
      * @throws InvalidArgumentException
-     * @return the url segment built
+     * @return string the url segment built
      */
     public function getUrlSegment($entity, $operation, $params = null)
     {
@@ -50,7 +52,7 @@ abstract class UrlResolver
         }
     
         if (!isset($this->urlInfo[$entity][$operation])) {
-            throw new InvalidArgumentException("the request method " . $requestMethod. 'was not found ');
+            throw new InvalidArgumentException("the request method " . $operation. 'was not found ');
         }
     
         $numberParams = $this->urlInfo[$entity][$operation]['numberParams'];

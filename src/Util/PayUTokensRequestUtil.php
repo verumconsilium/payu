@@ -4,6 +4,7 @@ namespace VerumConsilium\PayU\Util;
 
 use stdClass;
 use VerumConsilium\PayU\Api\PayUCommands;
+use VerumConsilium\PayU\Api\PayUConfig;
 use VerumConsilium\PayU\PayU;
 
 /**
@@ -120,7 +121,7 @@ class PayUTokensRequestUtil extends CommonRequestUtil
     /**
      * Builds a credit card token to be added to request
      * @param array $parameters
-     * @return the credit card token built
+     * @return string the credit card token built
      */
     private static function buildCreditCardToken($parameters)
     {

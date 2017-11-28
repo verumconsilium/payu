@@ -3,6 +3,8 @@
 namespace VerumConsilium\PayU\Util;
 
 use stdClass;
+use VerumConsilium\PayU\Api\PayUCommands;
+use VerumConsilium\PayU\Api\PayUKeyMapName;
 use VerumConsilium\PayU\PayU;
 
 /**
@@ -32,10 +34,7 @@ class PayUReportsRequestUtil extends CommonRequestUtil
         }
     
         $request = CommonRequestUtil::buildCommonRequest(
-    
-            $lang,
-                PayUCommands::PING
-    
+            $lang,PayUCommands::PING
         );
     
         return $request;

@@ -2,8 +2,13 @@
 
 namespace VerumConsilium\PayU\Util;
 
+use InvalidArgumentException;
 use stdClass;
+use VerumConsilium\PayU\Api\Environment;
+use VerumConsilium\PayU\Api\PayUConfig;
 use VerumConsilium\PayU\Api\PayUHttpRequestInfo;
+use VerumConsilium\PayU\Api\PayUKeyMapName;
+use VerumConsilium\PayU\PayU;
 
 /**
  *
@@ -22,7 +27,10 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Build a subscription request
      * @param array $parameters
-     * @return stdClass with the subscriptionrequest built
+     * @param bool $existParamBankAccount
+     * @param bool $existParamCreditCard
+     * @param bool $edit
+     * @return stdClass with the subscription request built
      */
     public static function buildSubscription($parameters, $existParamBankAccount=false, $existParamCreditCard=false, $edit = false)
     {
@@ -70,9 +78,9 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
             $subscription->plan = PayUSubscriptionsRequestUtil::buildSubscriptionPlan($parameters);
             $subscription->plan->id = CommonRequestUtil::getParameter($parameters, PayUParameters::PLAN_ID);
             
-            $termsAndConditionsAcepted = CommonRequestUtil::getParameter($parameters, PayUParameters::TERMS_AND_CONDITIONS_ACEPTED);
-            if (isset($termsAndConditionsAcepted)) {
-                $subscription->termsAndConditionsAcepted = $termsAndConditionsAcepted;
+            $termsAndConditionsAccepted = CommonRequestUtil::getParameter($parameters, PayUParameters::TERMS_AND_CONDITIONS_ACEPTED);
+            if (isset($termsAndConditionsAccepted)) {
+                $subscription->termsAndConditionsAcepted = $termsAndConditionsAccepted;
             }
         }
         return $subscription;
@@ -81,6 +89,7 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Build the Credit card object for subscription
      * @param array $parameters
+     * @return stdClass
      */
     protected static function buildCreditCardForSubscription($parameters)
     {
@@ -100,6 +109,7 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Build the Credit card object for subscription
      * @param array $parameters
+     * @return stdClass
      */
     protected static function buildBankAccountForSubscription($parameters)
     {
@@ -200,7 +210,7 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Build an address object to be added to payment request
      * @param array $parameters
-     * @return return an address
+     * @return stdClass return an address
      */
     private static function buildAddress($parameters)
     {
@@ -215,15 +225,13 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
         $address->line3 = CommonRequestUtil::getParameter($parameters, PayUParameters::PAYER_STREET_3);
         return $address;
     }
-    
+
     /**
-     * Build order additional values
-     * @param string $txCurrency
-     * @param string $txValue
-     * @param string $taxValue
-     * @param string $taxReturnBase
-     * @return the a map with the valid additional values
-     *
+     * @param $planCurrency
+     * @param $planValue
+     * @param $planTaxValue
+     * @param $planTaxReturnBase
+     * @return array|null|Object
      */
     private static function buildSubscriptionPlanAdditionalValues($planCurrency, $planValue, $planTaxValue, $planTaxReturnBase)
     {
@@ -237,15 +245,18 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     
         return $additionalValues;
     }
-    
+
     /**
      * Build item additional values
-     * @param string $txCurrency
-     * @param string $txValue
+     *
+     * @param        $currency
+     * @param        $value
      * @param string $taxValue
      * @param string $taxReturnBase
-     * @return the a map with the valid additional values
+     * @return string the a map with the valid additional values
      *
+     * @internal param string $txCurrency
+     * @internal param string $txValue
      */
     private static function buildItemAdditionalValues($currency, $value, $taxValue, $taxReturnBase)
     {
@@ -259,17 +270,15 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     
         return $additionalValues;
     }
-    
-    
-    
-    
+
     /**
      * Build a additional value and add it to container object
+     *
      * @param Object $container
-     * @param string $txCurrency the code of the transaction currency
+     * @param string $txCurrency  the code of the transaction currency
      * @param string $txValueName the parameter name
-     * @param string $value the parameter value
-     * @return $container whith the valid additional values  added
+     * @param string $value       the parameter value
+     * @return array|Object $container with the valid additional values  added
      *
      */
     private static function addAdditionalValue($container, $txCurrency, $txValueName, $value)
@@ -344,7 +353,7 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Validate a subscription plan
      * @param array $parameters
-     * @throws InvalidParameterException
+     * @throws InvalidArgumentException
      */
     public static function validateSubscriptionPlan($parameters)
     {
@@ -367,7 +376,8 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Validate a customer in subscription request
      * @param array $parameters
-     * @throws InvalidParameterException
+     * @param bool $edit
+     * @throws InvalidArgumentException
      */
     public static function validateCustomerToSubscription($parameters, $edit = false)
     {
@@ -385,7 +395,8 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Validate a customer
      * @param array $parameters
-     * @throws InvalidParameterException
+     * @param bool $edit
+     * @throws \InvalidArgumentException
      */
     public static function validateCustomer($parameters, $edit = false)
     {
@@ -405,7 +416,7 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Validate a Credit Card or Token
      * @param array $parameters
-     * @throws InvalidParameterException
+     * @throws \InvalidArgumentException
      */
     public static function validateCreditCard($parameters)
     {
@@ -434,7 +445,7 @@ class PayUSubscriptionsRequestUtil extends CommonRequestUtil
     /**
      * Validate a Bank Account
      * @param array $parameters
-     * @throws InvalidParameterException
+     * @throws InvalidArgumentException
      */
     public static function validateBankAccount($parameters)
     {

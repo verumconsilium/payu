@@ -2,9 +2,14 @@
 
 namespace VerumConsilium\PayU\Util;
 
-use RuntimeException;
 use stdClass;
+use VerumConsilium\PayU\Api\Environment;
+use VerumConsilium\PayU\Api\PayUConfig;
 use VerumConsilium\PayU\Api\PayUHttpRequestInfo;
+use VerumConsilium\PayU\Api\PayUResponseCode;
+use VerumConsilium\PayU\Exception\PayUErrorCodes;
+use VerumConsilium\PayU\Exception\PayUException;
+use VerumConsilium\PayU\PayU;
 
 /**
  *
@@ -17,16 +22,15 @@ use VerumConsilium\PayU\Api\PayUHttpRequestInfo;
  */
 class PayUApiServiceUtil
 {
-    
-    
+
     /**
      * Sends a request type json
      *
-     * @param \stdClass $request this object is encode to json is used to request data
+     * @param stdClass $request this object is encode to json is used to request data
      * @param PayUHttpRequestInfo $payUHttpRequestInfo object with info to send an Api request
-     * @param bool $removeNullValues if remove null values in request and response object
+     * @param bool $removeNullValues   if remove null values in request and response object
      * @return string response
-     * @throws RuntimeException
+     * @throws PayUException
      */
     public static function sendRequest($request, PayUHttpRequestInfo $payUHttpRequestInfo, $removeNullValues = null)
     {

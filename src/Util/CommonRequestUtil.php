@@ -2,8 +2,10 @@
 
 namespace VerumConsilium\PayU\Util;
 
+use DateTime;
 use InvalidArgumentException;
 use stdClass;
+use VerumConsilium\PayU\PayU;
 
 /**
  *
@@ -19,7 +21,7 @@ class CommonRequestUtil
     
     
     /**
-     * Add to request object common info to proccess a request
+     * Add to request object common info to process a request
      * @param string $lang language to be used
      * @param string $command PayU request command
      * @return stdClass the request with basic information
@@ -36,7 +38,7 @@ class CommonRequestUtil
     
     /**
      * Build a merchant to be added to request
-     * @return the merchant built
+     * @return string the merchant built
      */
     protected static function buildMerchant()
     {
@@ -53,7 +55,7 @@ class CommonRequestUtil
      * @param Object $map
      * @param string $key the key to entry key
      * @param string $value the value to the entry value
-     * @return $map whith the valid entry
+     * @return string $map whit the valid entry
      *
      */
     public static function addMapEntry($map, $key, $value)
@@ -77,7 +79,7 @@ class CommonRequestUtil
      * @param array $parameters holds the parameters
      * @param array $required holds the key names of the required parameters
      * @param array $invalid holds the key names of the invalid parameters
-     * @throws InvalidParameterException
+     * @throws \InvalidArgumentException
      */
     public static function validateParameters($parameters, $required = null, $invalid = null)
     {
@@ -159,8 +161,8 @@ class CommonRequestUtil
     
     /**
      * Build a basic credit card object to be added to payment request
-     * @param object $parameters with the credit card info
-     * @return the credit card built
+     * @param array $parameters with the credit card info
+     * @return stdClass  the credit card built
      */
     protected static function buildCreditCard($parameters)
     {
@@ -202,12 +204,12 @@ class CommonRequestUtil
     
     
     /**
-     * Adds the attributes of params as "@QueryParms" to the given url
+     * Adds the attributes of params as "@QueryParams" to the given url
      *
      * @param string $url the base url
      * @param string $params a stdClass containing the params to be added
      *
-     * @return the url with the params appended to it
+     * @return string the url with the params appended to it
      */
     public static function addQueryParamsToUrl($url, $params)
     {
