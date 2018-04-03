@@ -1,6 +1,6 @@
 <?php
 
-namespace VerumConsilium\PayU\Exception;
+namespace VerumConsilium\PayU\Exceptions;
 
 /**
  *
@@ -12,19 +12,18 @@ namespace VerumConsilium\PayU\Exception;
  */
 class PayUErrorCodes
 {
-    
     /** json serialization error */
     const JSON_SERIALIZATION_ERROR = 'JSON_SERIALIZATION_ERROR';
-    
+
     /** json deserialization error */
-    const JSON_DESERIALIZATION_ERROR= 'JSON_DESERIALIZATION_ERROR';
-    
+    const JSON_DESERIALIZATION_ERROR = 'JSON_DESERIALIZATION_ERROR';
+
     /** invalid parameters for build request */
-    const INVALID_PARAMETERS= 'INVALID_PARAMETERS';
-    
+    const INVALID_PARAMETERS = 'INVALID_PARAMETERS';
+
     /** connection error */
-    const CONNECTION_EXCEPTION= 'CONNECTION_EXCEPTION';
-    
+    const CONNECTION_EXCEPTION = 'CONNECTION_EXCEPTION';
+
     /** general Api error */
-    const API_ERROR= 'API_ERROR';
+    const API_ERROR = 'API_ERROR';
 }
