@@ -1,6 +1,6 @@
 <?php
 
-namespace VerumConsilium\PayU\Exception;
+namespace VerumConsilium\PayU\Exceptions;
 
 use Exception;
 

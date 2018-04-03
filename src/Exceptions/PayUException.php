@@ -1,6 +1,6 @@
 <?php
 
-namespace VerumConsilium\PayU\Exception;
+namespace VerumConsilium\PayU\Exceptions;
 
 use Exception;
 
@@ -15,8 +15,7 @@ use Exception;
 class PayUException extends Exception
 {
     public $payUCode;
-    
-    
+
     /**
      * constructor method
      * @param string $payuCode a element of PayUErrorCodes
